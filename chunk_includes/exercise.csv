@@ -1,10 +1,37 @@
-ITEM,CONDITION,SENTENCE
-2001,0,"In Internetforen diskutierten Eltern."
-2002,0,"Beide Einrichtungen wurden von Freiwilligen betrieben."
-2003,0,"Die Journalisten warteten vor der Tür."
-2004,0,"Kein Kind klagte über Schmerzen."
-2005,0,"Der Trainer lief davon."
-2006,0,"Das Team wollte jedes Spiel gewinnen."
-2007,0,"Der Bundesrat schien sich zu treffen."
-2008,0,"Der Radfahrer kippte zur Seite."
-2009,0,"Der Schwerpunkt änderte sich."
+"EXERCISE_ITEM","CONDITION","VERB","ADJECTIVE","ADJECTIVE_TYPE","EXERCISE_SENTENCE","TYPE","LIST"
+2001,0,".",".",".","In Internetforen*diskutierten*Eltern,*bevor*sie mit*den Lehrern*sprachen.","exercise",1
+2002,0,".",".",".","Beide Einrichtungen*wurden*von Freiwilligen*betrieben,*wobei*es an*der Buchhaltung*haperte.","exercise",1
+2003,0,".",".",".","Das Fruchtfleisch*war*gelblichweiß,*bevor*die Frucht*reif war.","exercise",1
+2004,0,".",".",".","Das Kind*klagte*über Schmerzen,*während*die Mutter*Milchreis kochte.","exercise",1
+2005,0,".",".",".","Das Paar*hatte*vier Kinder,*aber*wollte*nur zwei.","exercise",1
+2006,0,".",".",".","Das Team*wollte*jedes Spiel*gewinnen,*während*es*dem Trainer*egal war.","exercise",1
+2007,0,".",".",".","Der Bundesrat*schien sich*zu treffen,*während*die Journalisten*vor der Türe*warteten.","exercise",1
+2008,0,".",".",".","Die UN*riefen*Myanmar*dazu auf,*die Verfolgung*der Rohingya*zu beenden.","exercise",1
+2009,0,".",".",".","Der Schwerpunkt*änderte*sich, während der Radrennfahrer zur Seite kippte.","exercise",1
+2001,0,".",".",".","In Internetforen*diskutierten*Eltern,*bevor*sie mit*den Lehrern*sprachen.","exercise",2
+2002,0,".",".",".","Beide Einrichtungen*wurden*von Freiwilligen*betrieben,*wobei*es an*der Buchhaltung*haperte.","exercise",2
+2003,0,".",".",".","Das Fruchtfleisch*war*gelblichweiß,*bevor*die Frucht*reif war.","exercise",2
+2004,0,".",".",".","Das Kind*klagte*über Schmerzen,*während*die Mutter*Milchreis kochte.","exercise",2
+2005,0,".",".",".","Das Paar*hatte*vier Kinder,*aber*wollte*nur zwei.","exercise",2
+2006,0,".",".",".","Das Team*wollte*jedes Spiel*gewinnen,*während*es*dem Trainer*egal war.","exercise",2
+2007,0,".",".",".","Der Bundesrat*schien sich*zu treffen,*während*die Journalisten*vor der Türe*warteten.","exercise",2
+2008,0,".",".",".","Die UN*riefen*Myanmar*dazu auf,*die Verfolgung*der Rohingya*zu beenden.","exercise",2
+2009,0,".",".",".","Der Schwerpunkt*änderte*sich, während der Radrennfahrer zur Seite kippte.","exercise",2
+2001,0,".",".",".","In Internetforen*diskutierten*Eltern,*bevor*sie mit*den Lehrern*sprachen.","exercise",3
+2002,0,".",".",".","Beide Einrichtungen*wurden*von Freiwilligen*betrieben,*wobei*es an*der Buchhaltung*haperte.","exercise",3
+2003,0,".",".",".","Das Fruchtfleisch*war*gelblichweiß,*bevor*die Frucht*reif war.","exercise",3
+2004,0,".",".",".","Das Kind*klagte*über Schmerzen,*während*die Mutter*Milchreis kochte.","exercise",3
+2005,0,".",".",".","Das Paar*hatte*vier Kinder,*aber*wollte*nur zwei.","exercise",3
+2006,0,".",".",".","Das Team*wollte*jedes Spiel*gewinnen,*während*es*dem Trainer*egal war.","exercise",3
+2007,0,".",".",".","Der Bundesrat*schien sich*zu treffen,*während*die Journalisten*vor der Türe*warteten.","exercise",3
+2008,0,".",".",".","Die UN*riefen*Myanmar*dazu auf,*die Verfolgung*der Rohingya*zu beenden.","exercise",3
+2009,0,".",".",".","Der Schwerpunkt*änderte*sich, während der Radrennfahrer zur Seite kippte.","exercise",3
+2001,0,".",".",".","In Internetforen*diskutierten*Eltern,*bevor*sie mit*den Lehrern*sprachen.",,"exercise",4
+2002,0,".",".",".","Beide Einrichtungen*wurden*von Freiwilligen*betrieben,*wobei*es an*der Buchhaltung*haperte.",,"exercise",4
+2003,0,".",".",".","Das Fruchtfleisch*war*gelblichweiß,*bevor*die Frucht*reif war.",,"exercise",4
+2004,0,".",".",".","Das Kind*klagte*über Schmerzen,*während*die Mutter*Milchreis kochte.",,"exercise",4
+2005,0,".",".",".","Das Paar*hatte*vier Kinder,*aber*wollte*nur zwei.",,"exercise",4
+2006,0,".",".",".","Das Team*wollte*jedes Spiel*gewinnen,*während*es*dem Trainer*egal war.",,"exercise",4
+2007,0,".",".",".","Der Bundesrat*schien sich*zu treffen,*während*die Journalisten*vor der Türe*warteten.",,"exercise",4
+2008,0,".",".",".","Die UN*riefen*Myanmar*dazu auf,*die Verfolgung*der Rohingya*zu beenden.",,"exercise",4
+2009,0,".",".",".","Der Schwerpunkt*änderte*sich, während der Radrennfahrer zur Seite kippte.",,"exercise",4

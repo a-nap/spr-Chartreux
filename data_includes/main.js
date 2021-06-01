@@ -4,6 +4,44 @@ DebugOff()   // Debugger is closed
 
 const voucher = b64_md5((Date.now() + Math.random()).toString()) // Voucher code generator
 
+// Optionally inject a question into a trial
+const askQuestion = () => [
+  newText( "question_text" , "Macht dieser Satz Sinn?", row.QUESTION_TEXT ),
+
+  newCanvas("Canvas", 600, 100)
+    .center()
+    .add(   0 ,  0,  getText("question_text"))
+    .add(   0 , 50 , newText("1 =") )
+    .add( 200 , 50 , newText("2 =") )
+    .add(  40 , 50 , newText("ja", "ja") )
+    .add( 240 , 50 , newText( "nein", "nein") )
+    .print()
+  ,
+  // Record time now
+  getVar("RESPONSETIME").global().set( v => Date.now() ),
+  // Answer keys are 1 for left and 2 for right
+  newSelector("answer")
+    .add( getText("ja") , getText("nein") )
+    .keys("1","2")
+    .log()
+    .once()
+    .wait()
+    ,
+   // Record the response time
+   getVar("RESPONSETIME").set( v => Date.now() - v )
+];
+
+// display a primer that can be clicked away by pressing space bar
+const newPrimer = () => [
+  newText('primer','*')
+    .css("font-size", "30pt")
+    .css("margin-top", "8px")
+    .center()
+    .print(),
+  newKey(" ").wait(),
+  getText('primer').remove(),
+];
+
 Header(
     // Declare global variables to store the participant's ID and demographic information
     newVar("ID").global(),
@@ -12,7 +50,9 @@ Header(
     newVar("NATIVE").global(),
     newVar("AGE").global(),
     newVar("GENDER").global(),
-    newVar("HAND").global()
+    newVar("HAND").global(),
+    newVar("RESPONSETIME").global(),
+    newVar("ACCURACY", []).global()
 )
  // Add the particimant info to all trials' results lines
 .log( "id"     , getVar("ID") )
@@ -22,10 +62,10 @@ Header(
 .log( "age"    , getVar("AGE") )
 .log( "gender" , getVar("GENDER") )
 .log( "hand"   , getVar("HAND") )
-.log( "code"   , voucher )
+.log( "code"   , voucher );
 
 // Sequence of events: consent to ethics statement required to start the experiment, participant information, instructions, exercise, transition screen, main experiment, result logging, and end screen.
-Sequence("ethics", "setcounter", "participants", "instructions", randomize("exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
+Sequence("ethics", "setcounter", "participants", "instructions", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
 
 // Ethics agreement: participants must agree before continuing
 newTrial("ethics",
@@ -160,26 +200,10 @@ newTrial("participants",
     getVar("AGE")    .set( getTextInput("input_age") ),
     getVar("GENDER") .set( getScale("input_gender") ),
     getVar("HAND")   .set( getScale("input_hand") )
-)
+);
 
 // Instructions
 newTrial("instructions",
-    newText("instructions_greeting", "<h2>Willkommen zum Experiment!</h2><p>Ihre Aufgabe in dieser Studie ist es, Sätze zu lesen und danach zu bewerten, wie natürlich sie klingen. Die Sätze sind unabhängig voneinander. Bitte lesen Sie schnell, aber so, dass Sie den Inhalt der Sätze verstehen können. Verlassen Sie sich bei der Bewertung der Natürlichkeit einfach auf Ihre Intuition. Zur Bewertung der Sätze nutzen Sie die folgende Skala:</p>")
-        .left()
-        .cssContainer({"margin":"1em"})
-        .print()
-        ,
-    // 7-point scale
-    newScale(7)
-        .before( newText("left", "<div class='fancy'>(<em>klingt sehr unnatürlich</em>)</div>") )
-        .after( newText("right", "<div class='fancy'>(<em>klingt sehr natürlich</em>)</div>") )
-        .keys()
-        .labelsPosition("top")
-        .color("LightCoral")
-        .cssContainer({"margin":"1em"})
-        .left()
-        .print()
-        ,
     newHtml("instructions_text", "instructions.html")
         .cssContainer({"margin":"1em"})
         .print()
@@ -188,78 +212,56 @@ newTrial("instructions",
         .cssContainer({"margin":"1em"})
         .print()
         .wait()
-)
+);
 
 // Exercise
-Template("exercise.csv", row =>
-    newTrial( "exercise" ,
-        newText("sentence", row.SENTENCE)
-            .cssContainer({"margin-top":"2em", "margin-bottom":"2em"})
-            .center()
-            .print()
-            ,
-        newScale(7)
-            .before( newText("left", "<div class='fancy'>(<em>klingt sehr unnatürlich</em>)</div>") )
-            .after( newText("right", "<div class='fancy'>(<em>klingt sehr natürlich</em>)</div>") )
-            .keys()
-            .log()
-            .once()
-            .labelsPosition("top")
-            .color("LightCoral")
-            .center()
-            .print()
-            .wait()
-        ,
-        // Wait briefly to display which option was selected
-        newTimer("wait", 300)
-            .start()
-            .wait()
-    )
-)
+Template("experiment.csv", row =>
+  newTrial("experiment-"+row.TYPE,
+           newPrimer(),
+           // Dashed sentence. Segmentation is marked by spaces
+           newController("SelfPacedReadingParadigmSentence", {s : row.SENTENCE})
+           .center()
+           .print()
+           .log()
+           .wait()
+           .remove())
+    .log("LIST"          , row.LIST)
+    .log("ITEM"          , row.ITEM)
+    .log("CONDITION"     , row.CONDITION)
+    .log("ADJECTIVE"     , row.ADJECTIVE)
+    .log("VERB"          , row.VERB)
+    .log("ADJECTIVE TYPE", row.ADJTYPE)
+);
 
 // Start experiment
 newTrial( "start_experiment" ,
-    newText("<h2>Jetzt beginnt der Hauptteil der Studie.</h2>")
+    newText("<h2>Jetzt beginnt der Hauptteil der Studie.</h2><p>Sie kriegen Feedback nur bei falscher Antwort.</p>")
         .print()
     ,
     newButton("go_to_experiment", "Experiment starten")
         .print()
         .wait()
-)
+);
 
 // Experimental trial
 Template("experiment.csv", row =>
     newTrial( "experiment-"+row.TYPE,
-        newText("sentence", row.SENTENCE)
-            .cssContainer({"margin-top":"2em", "margin-bottom":"2em"})
-            .center()
-            .print()
-            ,
-    // 7-point scale
-        newScale(7)
-            .before( newText("left", "<div class='fancy'>(<em>klingt sehr unnatürlich</em>)</div>") )
-            .after( newText("right", "<div class='fancy'>(<em>klingt sehr natürlich</em>)</div>") )
-            .labelsPosition("top")
-            .keys()
-            .log()
-            .once()
-            .color("LightCoral")
-            .center()
-            .print()
-            .wait()
-        ,
-        // Wait briefly to display which option was selected
-        newTimer("wait", 300)
-            .start()
-            .wait()
-    )
-    // Record trial data
-    .log("LIST"     , row.LIST)
-    .log("ITEM"     , row.ITEM)
-    .log("CONDITION", row.CONDITION)
-    .log("ADJECTIVE", row.ADJECTIVE)
-    .log("ADVERB"   , row.ADVERB)
-)
+              newPrimer(),
+           // Dashed sentence. Segmentation is marked by spaces
+           newController("SelfPacedReadingParadigmSentence", {s : row.SENTENCE})
+           .center()
+           .print()
+           .log()
+           .wait()
+           .remove())
+    .log("LIST"          , row.LIST)
+    .log("ITEM"          , row.ITEM)
+    .log("CONDITION"     , row.CONDITION)
+    .log("ADJECTIVE"     , row.ADJECTIVE)
+    .log("VERB"          , row.VERB)
+    .log("ADJECTIVE TYPE", row.ADJTYPE)
+    .log( "RT"           , getVar("RESPONSETIME"))
+);
 
 // Final screen: explanation of the goal
 newTrial("end",
