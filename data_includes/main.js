@@ -225,12 +225,13 @@ Template("experiment.csv", row =>
            .log()
            .wait()
            .remove())
-    .log("LIST"          , row.LIST)
-    .log("ITEM"          , row.ITEM)
-    .log("CONDITION"     , row.CONDITION)
-    .log("ADJECTIVE"     , row.ADJECTIVE)
-    .log("VERB"          , row.VERB)
-    .log("ADJECTIVE TYPE", row.ADJTYPE)
+    .log("LIST"      , row.LIST)
+    .log("ITEM"      , row.ITEM)
+    .log("CONDITION" , row.CONDITION)
+    .log("ADJECTIVE" , row.ADJECTIVE)
+    .log("VERB"      , row.VERB)
+    .log("ADJTYPE"   , row.ADJTYPE)
+    .log("RT"        , getVar("RESPONSETIME"))
 );
 
 // Start experiment
@@ -254,13 +255,13 @@ Template("experiment.csv", row =>
            .log()
            .wait()
            .remove())
-    .log("LIST"          , row.LIST)
-    .log("ITEM"          , row.ITEM)
-    .log("CONDITION"     , row.CONDITION)
-    .log("ADJECTIVE"     , row.ADJECTIVE)
-    .log("VERB"          , row.VERB)
-    .log("ADJECTIVE TYPE", row.ADJTYPE)
-    .log( "RT"           , getVar("RESPONSETIME"))
+    .log("LIST"      , row.LIST)
+    .log("ITEM"      , row.ITEM)
+    .log("CONDITION" , row.CONDITION)
+    .log("ADJECTIVE" , row.ADJECTIVE)
+    .log("VERB"      , row.VERB)
+    .log("ADJTYPE"   , row.ADJTYPE)
+    .log("RT"        , getVar("RESPONSETIME"))
 );
 
 // Final screen: explanation of the goal
