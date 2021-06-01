@@ -216,10 +216,10 @@ newTrial("instructions",
 
 // Exercise
 Template("experiment.csv", row =>
-  newTrial("experiment-"+row.TYPE,
+  newTrial("experiment-exercise",
            newPrimer(),
            // Dashed sentence. Segmentation is marked by spaces
-           newController("SelfPacedReadingParadigmSentence", {s : row.SENTENCE})
+           newController("SelfPacedReadingParadigmSentence", {s : row.SENTENCE, splitRegex: /\*/})
            .center()
            .print()
            .log()
@@ -249,7 +249,7 @@ Template("experiment.csv", row =>
     newTrial( "experiment-"+row.TYPE,
               newPrimer(),
            // Dashed sentence. Segmentation is marked by spaces
-           newController("SelfPacedReadingParadigmSentence", {s : row.SENTENCE})
+           newController("SelfPacedReadingParadigmSentence", {s : row.SENTENCE, splitRegex: /\*/})
            .center()
            .print()
            .log()
