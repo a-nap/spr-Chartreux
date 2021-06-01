@@ -51,8 +51,7 @@ Header(
     newVar("AGE").global(),
     newVar("GENDER").global(),
     newVar("HAND").global(),
-    newVar("RESPONSETIME").global(),
-    newVar("ACCURACY", []).global()
+    newVar("RESPONSETIME").global()
 )
  // Add the particimant info to all trials' results lines
 .log( "id"     , getVar("ID") )
@@ -216,7 +215,7 @@ newTrial("instructions",
 
 // Exercise
 Template("experiment.csv", row =>
-  newTrial("experiment-exercise",
+  newTrial("experiment-"+row.TYPE,
            newPrimer(),
            // Dashed sentence. Segmentation is marked by *
            newController("SelfPacedReadingParadigmSentence", {s : row.SENTENCE, splitRegex: /\*/})
@@ -238,7 +237,7 @@ Template("experiment.csv", row =>
 
 // Start experiment
 newTrial( "start_experiment" ,
-    newText("<h2>Jetzt beginnt der Hauptteil der Studie.</h2><p>Sie kriegen Feedback nur bei falscher Antwort.</p>")
+    newText("<h2>Jetzt beginnt der Hauptteil der Studie.</h2>")
         .print()
     ,
     newButton("go_to_experiment", "Experiment starten")
