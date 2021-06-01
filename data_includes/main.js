@@ -6,7 +6,7 @@ const voucher = b64_md5((Date.now() + Math.random()).toString()) // Voucher code
 
 // Optionally inject a question into a trial
 const askQuestion = () => [
-  newText( "question_text" , "Macht dieser Satz Sinn?", row.QUESTION_TEXT ),
+  newText( "question_text" , "Macht dieser Satz Sinn?"),
 
   newCanvas("Canvas", 600, 100)
     .center()
@@ -218,13 +218,15 @@ newTrial("instructions",
 Template("experiment.csv", row =>
   newTrial("experiment-exercise",
            newPrimer(),
-           // Dashed sentence. Segmentation is marked by spaces
+           // Dashed sentence. Segmentation is marked by *
            newController("SelfPacedReadingParadigmSentence", {s : row.SENTENCE, splitRegex: /\*/})
-           .center()
-           .print()
-           .log()
-           .wait()
-           .remove())
+                .center()
+                .print()
+                .log()
+                .wait()
+                .remove()
+           ,
+           askQuestion())
     .log("LIST"      , row.LIST)
     .log("ITEM"      , row.ITEM)
     .log("CONDITION" , row.CONDITION)
