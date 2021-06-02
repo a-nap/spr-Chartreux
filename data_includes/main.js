@@ -5,23 +5,26 @@ DebugOff()   // Debugger is closed
 const voucher = b64_md5((Date.now() + Math.random()).toString()) // Voucher code generator
 
 // Optionally inject a question into a trial
-const askQuestion = () => [
+const askQuestion = (row) => [
   newText( "question_text" , "Macht dieser Satz Sinn?"),
+  newText( "answer_1" , row.ANSWER1),
+  newText( "answer_2" , row.ANSWER2),
 
   newCanvas("Canvas", 600, 100)
     .center()
     .add(   0 ,  0,  getText("question_text"))
     .add(   0 , 50 , newText("1 =") )
     .add( 200 , 50 , newText("2 =") )
-    .add(  40 , 50 , newText("ja", "ja") )
-    .add( 240 , 50 , newText( "nein", "nein") )
+    .add(  40 , 50 , getText("answer_1") )
+    .add( 240 , 50 , getText( "answer_2") )
     .print()
   ,
+
   // Record time now
   getVar("RESPONSETIME").global().set( v => Date.now() ),
   // Answer keys are 1 for left and 2 for right
   newSelector("answer")
-    .add( getText("ja") , getText("nein") )
+    .add( getText("answer_1") , getText("answer_2") )
     .keys("1","2")
     .log()
     .once()
@@ -64,7 +67,15 @@ Header(
 .log( "code"   , voucher );
 
 // Sequence of events: consent to ethics statement required to start the experiment, participant information, instructions, exercise, transition screen, main experiment, result logging, and end screen.
-Sequence("ethics", "setcounter", "participants", "instructions", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
+// The instructions depend on the counterbalance of answers (yes/no on the left or right). In the absence of manual assignment the participant are randomly assigned
+if (GetURLParameter("seqOrder")<=1)
+    Sequence("ethics", "setcounter", "participants", "instructions", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
+else if (GetURLParameter("seqOrder")>=2)
+    Sequence("ethics", "setcounter", "participants", "instructions2", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
+else if (Math.random() >= 0.5)
+    Sequence("ethics", "setcounter", "participants", "instructions", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
+else
+    Sequence("ethics", "setcounter", "participants", "instructions2", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
 
 // Ethics agreement: participants must agree before continuing
 newTrial("ethics",
@@ -94,6 +105,30 @@ newTrial("ethics",
 // the experiment at the same time, leading to a disproportionate assignment of participants
 // to lists.
 SetCounter("setcounter")
+
+// Instructions. "Nein" on the right
+newTrial("instructions",
+    newHtml("instructions_text", "instructions.html")
+        .cssContainer({"margin":"1em"})
+        .print(),
+
+    newButton("go_to_exercise", "Übung starten")
+        .cssContainer({"margin":"1em"})
+        .print()
+        .wait()
+);
+
+// Alternative instructions. "Nein" on the left
+newTrial("instructions2",
+    newHtml("instructions_text", "instructions2.html")
+        .cssContainer({"margin":"1em"})
+        .print(),
+
+    newButton("go_to_exercise", "Übung starten")
+        .cssContainer({"margin":"1em"})
+        .print()
+        .wait()
+);
 
 // Participant information: questions appear as soon as information is input
 newTrial("participants",
@@ -219,13 +254,13 @@ Template("experiment.csv", row =>
            newPrimer(),
            // Dashed sentence. Segmentation is marked by *
            newController("SelfPacedReadingParadigmSentence", {s : row.SENTENCE, splitRegex: /\*/})
-                .center()
-                .print()
-                .log()
-                .wait()
-                .remove()
-           ,
-           askQuestion())
+               .center()
+               .print()
+               .log()
+               .wait()
+               .remove(),
+           
+           askQuestion(row))
     .log("LIST"      , row.LIST)
     .log("ITEM"      , row.ITEM)
     .log("CONDITION" , row.CONDITION)
@@ -248,14 +283,16 @@ newTrial( "start_experiment" ,
 // Experimental trial
 Template("experiment.csv", row =>
     newTrial( "experiment-"+row.TYPE,
-              newPrimer(),
+           newPrimer(),
            // Dashed sentence. Segmentation is marked by spaces
            newController("SelfPacedReadingParadigmSentence", {s : row.SENTENCE, splitRegex: /\*/})
-           .center()
-           .print()
-           .log()
-           .wait()
-           .remove())
+               .center()
+               .print()
+               .log()
+               .wait()
+               .remove(),
+           
+           askQuestion(row))
     .log("LIST"      , row.LIST)
     .log("ITEM"      , row.ITEM)
     .log("CONDITION" , row.CONDITION)

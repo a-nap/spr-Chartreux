@@ -1,9 +1,9 @@
-OPEN rewrite end
-OPEN rewrite instruction
-OPEN change task to SPR
-OPEN change question to Sinnhaftigkeit
+DONE rewrite end
+DONE rewrite instruction
+DONE change task to SPR
+DONE add exercise
+DONE remove correct answer calculation
+DONE randomize the order of answers
+DONE change question to Sinnhaftigkeit
 OPEN add fillers
 OPEN make lists
-DONE add exercise
-OPEN remove correct answer calculation
-OPEN randomize the order of answers
