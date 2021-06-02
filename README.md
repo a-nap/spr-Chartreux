@@ -1,8 +1,8 @@
-# Acceptability Judgment Task for PCIbex
+# Self-Paced Reading Study for PCIbex
 
-This is an experiment template which allows the experimenter to collect 
-naturalness ratings to sentence stimuli. The experiment consists of the 
-following parts:
+This is an experiment template in which participants read sentences in segments
+and occasionally have to answer a comprehension question. The experiment 
+consists of the following parts:
 
 1. Obligatory ethics agreement
 2. Form for inputting general demographic participant information (ID, native
@@ -16,22 +16,44 @@ languages, federal state, age, gender, handedness)
 The experiment is in German but the comments and the majority of the code is in 
 English.
 
-## Task description
-
-The participants are asked to read short sentences and rate their acceptability 
-on a 7-point Likert scale from 1 (very unnatural) to 7 (very natural). The 
-sentence and the scale are presented simultaneously. In the main experiment 
-procedure, the stimuli presentation is randomly shuffled between critical items
-and distractor sentences.
-
 Once the participants consent to the ethics agreement, the list (or group) 
 counter switches to the next list/group. This is because in my experiments, 
 multiple participants can start the experiment simultaneously. By default, PCIbex
 switches to the next list once the participant has finished the experiment.
 
-At the end of the experiment, a random code is generated that the 
-participants should email to the principal researcher in order to receive 
-compensation.
+## Task description
+
+Before the start of the experiment, participants are asked to consent to the
+ethics agreement. Then they must fill in general questions concerning their age,
+ gender, handedness, native languages etc. Next, they read instructions 
+detailing the experimental task and giving examples of an experimental trial. 
+Next, they practice the task in an exercise, before continuing to the main 
+experiment. After completing the experiment, the participants are informed about 
+the purpose of the study and are informed about their accuracy. At the end of 
+the study, a random code is generated that the participants should email to the 
+principal researcher in order to receive compensation.
+
+In the exercise and the main experiment, the sentences are presented in 
+increments (phrase-by-phrase). 
+The participants control when each segment of the the sentence is presented by 
+pressing the space bar. At the beginning of a trial, an asterisk (\*) appears. 
+Then, the sentence is presented entirely, with letters substituted for dashes. 
+When the participants press the space bar, the first part of the sentence 
+appears in place of the dashes. The remainder of the sentence is still concealed 
+behind dashes. Each time the participants press the space bar, a new sentence 
+segment appears and the previous one disappears. The participants can move 
+forward in the sentence but cannot revisit the sentence parts they have already 
+read. After the last segment, the trial ends with another press of the space bar. 
+
+The sentence presentation is occasionally followed by a question display. The 
+participants use two predetermined keys to answer the questions. The two 
+possible answers are presented on the left and on the right of the screen. The 
+distribution of the answers is randomized. No feedback is provided.
+
+In the exercise, the order of the sentences is random. In the main experiment 
+procedure, the stimuli presentation is randomly shuffled between critical items
+and distractor sentences.
+
 
 ## Contributing
 
