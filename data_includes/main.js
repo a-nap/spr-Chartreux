@@ -4,6 +4,27 @@ DebugOff()   // Debugger is closed
 
 const voucher = b64_md5((Date.now() + Math.random()).toString()) // Voucher code generator
 
+Header(
+    // Declare global variables to store the participant's ID and demographic information
+    newVar("ID").global(),
+    newVar("GERMAN").global(),
+    newVar("LAND").global(),
+    newVar("NATIVE").global(),
+    newVar("AGE").global(),
+    newVar("GENDER").global(),
+    newVar("HAND").global(),
+    newVar("RESPONSETIME").global()
+)
+ // Add the particimant info to all trials' results lines
+.log( "id"     , getVar("ID") )
+.log( "german" , getVar("GERMAN") )
+.log( "land"   , getVar("LAND") )
+.log( "native" , getVar("NATIVE") )
+.log( "age"    , getVar("AGE") )
+.log( "gender" , getVar("GENDER") )
+.log( "hand"   , getVar("HAND") )
+.log( "code"   , voucher );
+
 // Optionally inject a question into a trial
 const askQuestion = (row) => [
   newText( "question_text" , "Macht dieser Satz Sinn?"),
@@ -16,12 +37,13 @@ const askQuestion = (row) => [
     .add(   0 , 50 , newText("1 =") )
     .add( 200 , 50 , newText("2 =") )
     .add(  40 , 50 , getText("answer_1") )
-    .add( 240 , 50 , getText( "answer_2") )
+    .add( 240 , 50 , getText("answer_2") )
     .print()
   ,
 
   // Record time now
   getVar("RESPONSETIME").global().set( v => Date.now() ),
+
   // Answer keys are 1 for left and 2 for right
   newSelector("answer")
     .add( getText("answer_1") , getText("answer_2") )
@@ -45,37 +67,14 @@ const newPrimer = () => [
   getText('primer').remove(),
 ];
 
-Header(
-    // Declare global variables to store the participant's ID and demographic information
-    newVar("ID").global(),
-    newVar("GERMAN").global(),
-    newVar("LAND").global(),
-    newVar("NATIVE").global(),
-    newVar("AGE").global(),
-    newVar("GENDER").global(),
-    newVar("HAND").global(),
-    newVar("RESPONSETIME").global()
-)
- // Add the particimant info to all trials' results lines
-.log( "id"     , getVar("ID") )
-.log( "german" , getVar("GERMAN") )
-.log( "land"   , getVar("LAND") )
-.log( "native" , getVar("NATIVE") )
-.log( "age"    , getVar("AGE") )
-.log( "gender" , getVar("GENDER") )
-.log( "hand"   , getVar("HAND") )
-.log( "code"   , voucher );
-
 // Sequence of events: consent to ethics statement required to start the experiment, participant information, instructions, exercise, transition screen, main experiment, result logging, and end screen.
 // The instructions depend on the counterbalance of answers (yes/no on the left or right). In the absence of manual assignment the participant are randomly assigned
 if (GetURLParameter("seqOrder")<=1)
     Sequence("ethics", "setcounter", "participants", "instructions", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
 else if (GetURLParameter("seqOrder")>=2)
     Sequence("ethics", "setcounter", "participants", "instructions2", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
-else if (Math.random() >= 0.5)
+else 
     Sequence("ethics", "setcounter", "participants", "instructions", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
-else
-    Sequence("ethics", "setcounter", "participants", "instructions2", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
 
 // Ethics agreement: participants must agree before continuing
 newTrial("ethics",
@@ -97,38 +96,14 @@ newTrial("ethics",
         .disable()
         .print()
         .wait()
-)
+);
 
 // Start the next list as soon as the participant agrees to the ethics statement
 // This is different from PCIbex's normal behavior, which is to move to the next list once 
 // the experiment is completed. In my experiment, multiple participants are likely to start 
 // the experiment at the same time, leading to a disproportionate assignment of participants
 // to lists.
-SetCounter("setcounter")
-
-// Instructions. "Nein" on the right
-newTrial("instructions",
-    newHtml("instructions_text", "instructions.html")
-        .cssContainer({"margin":"1em"})
-        .print(),
-
-    newButton("go_to_exercise", "Übung starten")
-        .cssContainer({"margin":"1em"})
-        .print()
-        .wait()
-);
-
-// Alternative instructions. "Nein" on the left
-newTrial("instructions2",
-    newHtml("instructions_text", "instructions2.html")
-        .cssContainer({"margin":"1em"})
-        .print(),
-
-    newButton("go_to_exercise", "Übung starten")
-        .cssContainer({"margin":"1em"})
-        .print()
-        .wait()
-);
+SetCounter("setcounter");
 
 // Participant information: questions appear as soon as information is input
 newTrial("participants",
@@ -236,38 +211,28 @@ newTrial("participants",
     getVar("HAND")   .set( getScale("input_hand") )
 );
 
-// Instructions
+// Instructions. "Nein" on the right
 newTrial("instructions",
     newHtml("instructions_text", "instructions.html")
         .cssContainer({"margin":"1em"})
-        .print()
-        ,
+        .print(),
+
     newButton("go_to_exercise", "Übung starten")
         .cssContainer({"margin":"1em"})
         .print()
         .wait()
 );
 
-// Exercise
-Template("experiment.csv", row =>
-  newTrial("experiment-"+row.TYPE,
-           newPrimer(),
-           // Dashed sentence. Segmentation is marked by *
-           newController("SelfPacedReadingParadigmSentence", {s : row.SENTENCE, splitRegex: /\*/})
-               .center()
-               .print()
-               .log()
-               .wait()
-               .remove(),
-           
-           askQuestion(row))
-    .log("LIST"      , row.LIST)
-    .log("ITEM"      , row.ITEM)
-    .log("CONDITION" , row.CONDITION)
-    .log("ADJECTIVE" , row.ADJECTIVE)
-    .log("VERB"      , row.VERB)
-    .log("ADJTYPE"   , row.ADJTYPE)
-    .log("RT"        , getVar("RESPONSETIME"))
+// Alternative instructions. "Nein" on the left
+newTrial("instructions2",
+    newHtml("instructions_text", "instructions2.html")
+        .cssContainer({"margin":"1em"})
+        .print(),
+
+    newButton("go_to_exercise", "Übung starten")
+        .cssContainer({"margin":"1em"})
+        .print()
+        .wait()
 );
 
 // Start experiment
@@ -284,14 +249,13 @@ newTrial( "start_experiment" ,
 Template("experiment.csv", row =>
     newTrial( "experiment-"+row.TYPE,
            newPrimer(),
-           // Dashed sentence. Segmentation is marked by spaces
+           // Dashed sentence. Segmentation is marked by "*"
            newController("SelfPacedReadingParadigmSentence", {s : row.SENTENCE, splitRegex: /\*/})
                .center()
                .print()
                .log()
                .wait()
                .remove(),
-           
            askQuestion(row))
     .log("LIST"      , row.LIST)
     .log("ITEM"      , row.ITEM)
