@@ -5,7 +5,8 @@ DebugOff()   // Debugger is closed
 const voucher = b64_md5((Date.now() + Math.random()).toString()) // Voucher code generator
 
 Header(
-    // Declare global variables to store the participant's ID and demographic information
+// Declare global variables to store the participant's ID, demographic 
+// information and response time
     newVar("ID").global(),
     newVar("GERMAN").global(),
     newVar("LAND").global(),
@@ -67,8 +68,11 @@ const newPrimer = () => [
   getText('primer').remove(),
 ];
 
-// Sequence of events: consent to ethics statement required to start the experiment, participant information, instructions, exercise, transition screen, main experiment, result logging, and end screen.
-// The instructions depend on the counterbalance of answers (yes/no on the left or right). In the absence of manual assignment the participant are randomly assigned
+// Sequence of events: consent to ethics statement required to start the 
+// experiment, participant information, instructions, exercise, transition 
+// screen, main experiment, result logging, and end screen. The instructions 
+// depend on the counterbalance of answers (yes/no on the left or right). In the 
+// absence of manual assignment the participant are assigned to instruction 1
 if (GetURLParameter("seqOrder")<=1)
     Sequence("ethics", "setcounter", "participants", "instructions", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
 else if (GetURLParameter("seqOrder")>=2)
@@ -99,10 +103,10 @@ newTrial("ethics",
 );
 
 // Start the next list as soon as the participant agrees to the ethics statement
-// This is different from PCIbex's normal behavior, which is to move to the next list once 
-// the experiment is completed. In my experiment, multiple participants are likely to start 
-// the experiment at the same time, leading to a disproportionate assignment of participants
-// to lists.
+// This is different from PCIbex's normal behavior, which is to move to the next 
+// list once the experiment is completed. In my experiment, multiple 
+// participants are likely to start the experiment at the same time, leading to 
+// a disproportionate assignment of participants to lists.
 SetCounter("setcounter");
 
 // Participant information: questions appear as soon as information is input
@@ -268,7 +272,7 @@ Template("experiment.csv", row =>
 
 // Final screen: explanation of the goal
 newTrial("end",
-    newText("<div class='fancy'><h2>Vielen Dank für die Teilnahme an unserer Studie!</h2></div><p>Um Ihre Vergütung zu bekommen, schicken Sie bitte diesen persönlichen Code an die Versuchsleiterin: <div class='fancy'><em>".concat(voucher, "</em></div></p>"))
+    newText("<div class='fancy'><h2>Vielen Dank für die Teilnahme an unserer Studie!</h2></div><p><b>Wichtig!</b> Um Ihre Vergütung zu bekommen, schicken Sie bitte diesen persönlichen Code an die Versuchsleiterin: <div class='fancy'><em>".concat(voucher, "</em></div></p>"))
         .cssContainer({"margin-top":"1em", "margin-bottom":"1em"})
         .print()
     ,
