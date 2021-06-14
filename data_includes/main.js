@@ -77,6 +77,10 @@ if (GetURLParameter("seqOrder")<=1)
     Sequence("ethics", "setcounter", "participants", "instructions", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
 else if (GetURLParameter("seqOrder")>=2)
     Sequence("ethics", "setcounter", "participants", "instructions2", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
+else if (GetURLParameter("withsquare")<=1)
+    Sequence("ethics", "setcounter", "participants", "instructions", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
+else if (GetURLParameter("withsquare")>=2)
+    Sequence("ethics", "setcounter", "participants", "instructions2", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
 else 
     Sequence("ethics", "setcounter", "participants", "instructions", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
 
