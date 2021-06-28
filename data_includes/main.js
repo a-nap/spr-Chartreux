@@ -84,6 +84,9 @@ else if (GetURLParameter("withsquare")>=2)
 else 
     Sequence("ethics", "setcounter", "participants", "instructions", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
 
+// Enable this and comment out the sequences above after the experiment has finished
+// Sequence("finished")
+
 // Ethics agreement: participants must agree before continuing
 newTrial("ethics",
     newHtml("ethics_explanation", "ethics.html")
@@ -287,3 +290,13 @@ newTrial("end",
     newButton().wait()
 )
 .setOption("countsForProgressBar",false);
+
+// Ethics agreement: participants must agree before continuing
+newTrial("finished",
+    newHtml("finished_experiment", "finished.html")
+        .cssContainer({"margin":"1em"})
+        .print()
+    ,
+    // Trick: stay on this trial forever (until tab is closed)
+    newButton().wait()
+);
