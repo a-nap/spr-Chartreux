@@ -73,7 +73,7 @@ const newPrimer = () => [
 // screen, main experiment, result logging, and end screen. The instructions 
 // depend on the counterbalance of answers (yes/no on the left or right). In the 
 // absence of manual assignment the participant are assigned to instruction 1
-if (GetURLParameter("seqOrder")<=1)
+/*if (GetURLParameter("seqOrder")<=1)
     Sequence("ethics", "setcounter", "participants", "instructions", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
 else if (GetURLParameter("seqOrder")>=2)
     Sequence("ethics", "setcounter", "participants", "instructions2", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
@@ -82,10 +82,10 @@ else if (GetURLParameter("withsquare")<=1)
 else if (GetURLParameter("withsquare")>=2)
     Sequence("ethics", "setcounter", "participants", "instructions2", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
 else 
-    Sequence("ethics", "setcounter", "participants", "instructions", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")
+    Sequence("ethics", "setcounter", "participants", "instructions", randomize("experiment-exercise"), "start_experiment", rshuffle("experiment-filler", "experiment-item"), SendResults(), "end")*/
 
 // Enable this and comment out the sequences above after the experiment has finished
-// Sequence("finished")
+Sequence("finished")
 
 // Ethics agreement: participants must agree before continuing
 newTrial("ethics",
